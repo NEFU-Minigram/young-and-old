@@ -1,0 +1,9 @@
+<!-- 确认是 data-type="old" -->
+<view class="card old-card" bindtap="goToChat" data-type="old">
+  <text class="card-title">👴 Old 助手</text>
+</view>
+
+<!-- 确认是 data-type="young" -->
+<view class="card young-card" bindtap="goToChat" data-type="young">
+  <text class="card-title">🧑‍🎤 Young 助手</text>
+</view>
