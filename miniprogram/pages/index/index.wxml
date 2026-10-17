@@ -1,9 +1,60 @@
-<!-- 确认是 data-type="old" -->
-<view class="card old-card" bindtap="goToChat" data-type="old">
-  <text class="card-title">👴 Old 助手</text>
+<view class="page-container">
+
+<!-- ================= 首页选人界面 ================= -->
+<view class="home-view" wx:if="{{currentView === 'home'}}">
+  <view class="title">选择你的 AI 助手</view>
+  
+  <view class="card old-card" bindtap="enterChat" data-type="old">
+    <text class="card-title">👴常青</text>
+    <text class="card-desc">守护一段岁月，暖而不忧</text>
+  </view>
+
+  <view class="card young-card" bindtap="enterChat" data-type="young">
+    <text class="card-title">🧑‍🎤新芽</text>
+    <text class="card-desc">护一芽好奇，轻巧生长</text>
+  </view>
 </view>
 
-<!-- 确认是 data-type="young" -->
-<view class="card young-card" bindtap="goToChat" data-type="young">
-  <text class="card-title">🧑‍🎤 Young 助手</text>
+<!-- ================= 聊天界面 ================= -->
+<view class="chat-view" wx:if="{{currentView === 'chat'}}">
+  
+  <!-- 顶栏 -->
+  <view class="chat-header">
+    <text class="back-btn" bindtap="goBack">〈返回</text>
+    <text class="chat-title">{{agentType === 'old' ? '常青' : '新芽'}}</text>
+    <view style="width: 100rpx;"></view>
+  </view>
+
+  <!-- 聊天记录区 -->
+  <scroll-view class="chat-list" scroll-y scroll-into-view="{{scrollToView}}">
+    <block wx:for="{{chatList}}" wx:key="index">
+      <view class="message {{item.role}}" id="msg-{{index}}">
+        <text wx:if="{{item.role === 'user'}}">{{item.content}}</text>
+        <rich-text wx:else nodes="{{item.htmlContent}}"></rich-text>
+      </view>
+    </block>
+    
+    <!-- AI 思考中的三个点动画 -->
+    <view class="message assistant" id="msg-loading" wx:if="{{isLoading}}">
+      <view class="loading-bubble">
+        <view class="dot"></view>
+        <view class="dot"></view>
+        <view class="dot"></view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 底部输入区（绝对定位，绝对不会消失） -->
+  <view class="input-area">
+    <input class="input-box" placeholder="聊点什么..." bindinput="onInput" value="{{inputValue}}" confirm-type="send" bindconfirm="sendMessage"/>
+    <button class="send-btn" bindtap="sendMessage" disabled="{{isLoading}}">发送</button>
+  </view>
+</view>
+
+<!-- ================= 全屏转场加载遮罩 ================= -->
+<view class="transition-mask" wx:if="{{isTransitioning}}">
+  <view class="loading-spinner"></view>
+  <text class="loading-text">正在召唤助手...</text>
+</view>
+
 </view>
